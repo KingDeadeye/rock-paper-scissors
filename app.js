@@ -1,38 +1,46 @@
-function getComputerChoice() {
-    let cs = Math.floor((Math.random() * 3) + 1);
-    return cs;
-}
+//ROCK :1 ,PAPER : 2 ,SCISSOR :3
 
-let Pwins;
-let Cwins;
+
+function getComputerChoice() {
+    let computerSelected = Math.floor((Math.random() * 3) + 1);
+    return computerSelected;
+}
+let userSelected;
+let computerSelected;
+let previousResultDiv;
+
+
+
+let userWins = 0;
+let compWins = 0;
 function game(playerSelect, ComputerChoice) {
 
-    let ps = playerSelect;
-    let cs = ComputerChoice;
+    userSelected = playerSelect;
+    computerSelected = ComputerChoice;
 
 
-    if (ps == 1 && cs == 2) {
+    if (userSelected == 1 && computerSelected == 2) {
 
-        Cwins++;
+        compWins++;
         return (`You lose! Paper beats Rock`);
-    } else if (ps == 2 && cs == 3) {
-        Cwins++;
+    } else if (userSelected == 2 && computerSelected == 3) {
+        compWins++;
         return (`You lose! Scissors beat paper`);
-    } else if (ps == 3 && cs == 1) {
-        Cwins++;
-        return (`You lose! Rock beats Paper`);
-    } else if (ps == 2 && cs == 1) {
-        Pwins++;
+    } else if (userSelected == 3 && computerSelected == 1) {
+        compWins++;
+        return (`You lose! Rock beats Scissors `);
+    } else if (userSelected == 2 && computerSelected == 1) {
+        userWins++;
         return (`You Win! Paper beats Rock`);
-    } else if (ps == 1 && cs == 3) {
-        Pwins++;
+    } else if (userSelected == 1 && computerSelected == 3) {
+        userWins++;
         return (`You Win! Rock beats Scissor`);
-    } else if (ps == 3 && cs == 2) {
-        Pwins++;
+    } else if (userSelected == 3 && computerSelected == 2) {
+        userWins++;
         return (`You Win! Scissor beat paper`);
-    } else if (ps == cs) {
-        console.log("its a draw rerolling");
-        return game(userPrompt(), getComputerChoice());
+    } else if (userSelected == computerSelected) {
+
+        return ("its a draw ReRoll.... Choose again");
     }
     else {
         return ("User input not valid");
@@ -42,29 +50,69 @@ function game(playerSelect, ComputerChoice) {
 
 
 function play() {
-    Cwins = 0;
-    Pwins = 0;
-    for (let i = 0; i < 5; i++) {
-        let result = game(userPrompt(), getComputerChoice());
-        console.log(result);
+    if (previousResultDiv) {
+        previousResultDiv.remove();
+    }
 
+    let result = game(playerOption, getComputerChoice());
+    const divv = document.createElement('div');
+    divv.textContent = result;
+    const div2 = document.createElement('p');
+
+
+    if ((userWins + compWins) == 5) {
+
+
+        if (userWins > compWins) {
+            div2.textContent = "User Won";
+            divv.append(div2);
+            userWins = 0;
+            compWins = 0;
+
+        } else {
+            div2.textContent = "Computer Won";
+            divv.append(div2);
+            userWins = 0;
+            compWins = 0;
+        }
     }
-    if (Pwins > Cwins) {
-        console.log("User Won");
-    } else {
-        console.log("Computer Won")
-    }
+    previousResultDiv = divv;
+    pk.append(previousResultDiv);
+
+   
 }
 
-function userPrompt() {
-    let ps = prompt("Enter your choice");
-    ps = ps.toLowerCase();
-    ps = (ps == 'rock') ? 1 :
-        (ps == 'paper') ? 2 :
-            (ps == 'scissor') ? 3 :
-                (console.log("not a valid input"), null);
 
 
-    return ps;
-}
-play();
+const buttonmain = document.querySelectorAll('button');
+const pk = document.querySelector('.container');
+
+
+
+const bt1 = document.querySelector('#bt1');
+const bt2 = document.querySelector('#bt2');
+const bt3 = document.querySelector('#bt3');
+bt1.addEventListener('click', () => {
+    playerOption = 1;
+});
+bt2.addEventListener('click', () => {
+    playerOption = 2;
+});
+bt3.addEventListener('click', () => {
+    playerOption = 3;
+});
+buttonmain.forEach(x => x.addEventListener('click', play));
+
+// for previous part of
+// function userPrompt() {
+//     let userSelected = prompt("Enter your choice");
+//     userSelected = userSelected.toLowerCase();
+//     userSelected = (userSelected == 'rock') ? 1 :
+//         (userSelected == 'paper') ? 2 :
+//             (userSelected == 'scissor') ? 3 :
+//                 (console.log("not a valid input"), null);
+
+
+//     return userSelected;
+// }
+
